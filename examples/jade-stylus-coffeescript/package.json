@@ -1,0 +1,41 @@
+{
+  "name": "jade-stylus-coffeescript",
+  "version": "0.0.0",
+  "description": "An example of using Gulp or Grunt to compile and optimise assets",
+  "main": "public/index.html",
+  "devDependencies": {
+  	"coffee-script": "latest",
+  	"gulp": "latest",
+  	"gulp-clean": "latest",
+  	"gulp-rename": "latest",
+  	"gulp-size": "latest",
+  	"gulp-jade": "latest",
+    "gulp-stylus": "latest",
+    "gulp-coffee": "latest",
+    "gulp-uglify": "latest",
+    "open": "latest",
+    "gulp-watch": "latest",
+    "gulp-changed": "latest",
+    "gulp-autoprefixer": "latest",
+    "gulp-header": "latest",
+    "gulp-concat": "latest",
+    "gulp-livereload": "latest",
+    "tiny-lr": "latest",
+    "express": "latest",
+    "path": "latest",
+    "gulp-util": "latest"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gulp",
+    "grunt",
+    "example",
+    "jade",
+    "stylus",
+    "coffeescript"
+  ],
+  "author": "Darryl Snow",
+  "license": "MIT"
+}

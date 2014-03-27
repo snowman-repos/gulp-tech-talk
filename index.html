@@ -1,0 +1,1200 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>GulpJS - Profero Tech Talk</title>
+  <style type="text/css">
+    body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #222;
+  background-color: #f7f7f7;
+  font-size: 100%;
+}
+
+#wrapper {
+  width: 850px;
+  height: 600px;
+  overflow: hidden;
+  margin: 80px auto 0 auto;
+}
+
+.slide {
+  width: auto;
+  height: 540px;
+  padding: 30px;
+  font-weight: 200;
+  font-size: 200%;
+  line-height: 1.375;
+}
+
+.controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.controls .arrow {
+  width: 0; height: 0;
+  border: 30px solid #333;
+  float: left;
+  margin-right: 30px;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.controls .prev {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+
+  border-left-width: 0;
+  border-right-width: 50px;
+}
+
+.controls .next {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+
+  border-left-width: 50px;
+  border-right-width: 0;
+}
+
+.controls .prev:hover {
+  border-right-color: #888;
+  cursor: pointer;
+}
+
+.controls .next:hover {
+  border-left-color: #888;
+  cursor: pointer;
+}
+
+.slide h1 {
+  font-size: 300%;
+  line-height: 1.2;
+  text-align: center;
+  margin: 170px 0 0;
+}
+
+.slide h2 {
+  font-size: 100%;
+  line-height: 1.2;
+  margin: 5px 0;
+  text-align: center;
+  font-weight: 200;
+}
+
+.slide h3 {
+  font-size: 140%;
+  line-height: 1.2;
+  border-bottom: 1px solid #aaa;
+  margin: 0;
+  padding-bottom: 15px;
+}
+
+.slide ul {
+  padding: 20px 0 0 60px;
+  font-weight: 200;
+  line-height: 1.375;
+}
+
+.slide .author h1.name {
+  font-size: 170%;
+  font-weight: 200;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.slide .author h3 {
+  font-weight: 100;
+  text-align: center;
+  font-size: 95%;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+  color: #44a4dd;
+}
+
+a:hover {
+  color: #66b5ff;
+}
+
+pre {
+  font-size: 60%;
+  line-height: 1.3;
+}
+
+.progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 3px;
+  background-color: #b4b4b4;
+
+  -webkit-transition: width 0.1s ease-out;
+  -moz-transition: width 0.1s ease-out;
+  -o-transition: width 0.1s ease-out;
+  transition: width 0.1s ease-out;
+}
+
+@media (max-width: 850px) {
+  #wrapper {
+    width: auto;
+  }
+
+  body {
+    font-size: 70%;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  .slide h1 {
+    margin-top: 120px;
+  }
+
+  .controls .prev, .controls .prev:hover {
+    border-right-color: rgba(135, 135, 135, 0.5);
+  }
+
+  .controls .next, .controls .next:hover {
+    border-left-color: rgba(135, 135, 135, 0.5);
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 50%;
+    overflow: hidden;
+  }
+
+  #wrapper {
+    margin-top: 10px;
+    height: 340px;
+  }
+
+  .slide {
+    padding: 10px;
+    height: 340px;
+  }
+
+  .slide h1 {
+    margin-top: 50px;
+  }
+
+  .slide ul {
+    padding-left: 25px;
+  }
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+  }
+
+  @page {
+    size: letter;
+  }
+
+  html {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  body {
+    margin: 0 auto !important;
+    border: 0;
+    padding: 0;
+    float: none !important;
+    overflow: visible;
+    background: none !important;
+    font-size: 52%;
+  }
+
+  .progress, .controls {
+    display: none;
+  }
+
+  #wrapper {
+    overflow: visible;
+    height: 100%;
+    margin-top: 0;
+  }
+
+  .slide {
+    border: 1px solid #222;
+    margin-bottom: 40px;
+    height: 3.5in;
+  }
+
+  .slide:nth-child(odd) {
+    /* 2 slides per page */
+    page-break-before: always;
+  }
+}
+
+/*
+github.com style (c) Vasily Polovnyov <vast@whiteants.net>
+*/
+
+code, pre {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  overflow: auto;
+  padding: 6px 10px;
+}
+
+code {
+  padding: 0 5px;
+}
+
+pre>code {
+  margin: 0; padding: 0;
+  border: none;
+  background: transparent;
+}
+
+pre .comment,
+pre .template_comment,
+pre .diff .header,
+pre .javadoc {
+  color: #998;
+  font-style: italic
+}
+
+pre .keyword,
+pre .css .rule .keyword,
+pre .winutils,
+pre .javascript .title,
+pre .nginx .title,
+pre .subst,
+pre .request,
+pre .status {
+  color: #333;
+  font-weight: bold
+}
+
+pre .number,
+pre .hexcolor,
+pre .ruby .constant {
+  color: #099;
+}
+
+pre .string,
+pre .tag .value,
+pre .phpdoc,
+pre .tex .formula {
+  color: #d14
+}
+
+pre .title,
+pre .id {
+  color: #900;
+  font-weight: bold
+}
+
+pre .javascript .title,
+pre .lisp .title,
+pre .clojure .title,
+pre .subst {
+  font-weight: normal
+}
+
+pre .class .title,
+pre .haskell .type,
+pre .vhdl .literal,
+pre .tex .command {
+  color: #458;
+  font-weight: bold
+}
+
+pre .tag,
+pre .tag .title,
+pre .rules .property,
+pre .django .tag .keyword {
+  color: #000080;
+  font-weight: normal
+}
+
+pre .attribute,
+pre .variable,
+pre .lisp .body {
+  color: #008080
+}
+
+pre .regexp {
+  color: #009926
+}
+
+pre .class {
+  color: #458;
+  font-weight: bold
+}
+
+pre .symbol,
+pre .ruby .symbol .string,
+pre .lisp .keyword,
+pre .tex .special,
+pre .prompt {
+  color: #990073
+}
+
+pre .built_in,
+pre .lisp .title,
+pre .clojure .built_in {
+  color: #0086b3
+}
+
+pre .preprocessor,
+pre .pi,
+pre .doctype,
+pre .shebang,
+pre .cdata {
+  color: #999;
+  font-weight: bold
+}
+
+pre .deletion {
+  background: #fdd
+}
+
+pre .addition {
+  background: #dfd
+}
+
+pre .diff .change {
+  background: #0086b3
+}
+
+pre .chunk {
+  color: #aaa
+}
+
+html, body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #444;
+  background: #e9e9e9; /* Old browsers */
+  background: -moz-linear-gradient(top,  #ffffff 0%, #e9e9e9 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e9e9e9)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #ffffff 0%,#e9e9e9 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #ffffff 0%,#e9e9e9 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #ffffff 0%,#e9e9e9 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #ffffff 0%,#e9e9e9 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e9e9e9',GradientType=0 ); /* IE6-9 */
+  font-size: 100%;
+  min-height: 100%;
+}
+
+h2 + p {
+	font-size: 0.7em;
+	text-align: center;
+}
+
+img {
+	vertical-align: middle;
+}
+
+#wrapper {
+  width: 850px;
+  height: 700px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.slide {
+  width: auto;
+  height: 640px;
+  padding: 30px;
+  font-weight: 200;
+  font-size: 200%;
+  line-height: 1.375;
+  overflow-y: scroll; 
+}
+
+.controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.controls .arrow {
+  width: 0; height: 0;
+  border: 30px solid #333;
+  float: left;
+  margin-right: 30px;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.controls .prev {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+
+  border-left-width: 0;
+  border-right-width: 50px;
+}
+
+.controls .next {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+
+  border-left-width: 50px;
+  border-right-width: 0;
+}
+
+.controls .prev:hover {
+  border-right-color: #888;
+  cursor: pointer;
+}
+
+.controls .next:hover {
+  border-left-color: #888;
+  cursor: pointer;
+}
+
+.slide h1 {
+  font-size: 300%;
+  line-height: 1.2;
+  text-align: center;
+  margin: 0;
+}
+
+.slide h2 {
+  font-size: 100%;
+  line-height: 1.2;
+  margin: 5px 0;
+  text-align: center;
+  font-weight: 200;
+}
+
+.slide h3 {
+  font-size: 140%;
+  line-height: 1.2;
+  border-bottom: 1px solid #aaa;
+  margin: 0;
+  padding-bottom: 15px;
+}
+
+.slide ul {
+  padding: 20px 0 0 60px;
+  font-weight: 200;
+  line-height: 1.375;
+}
+
+.slide .author h1.name {
+  font-size: 170%;
+  font-weight: 200;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.slide .author h3 {
+  font-weight: 100;
+  text-align: center;
+  font-size: 95%;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+  color: #44a4dd;
+}
+
+a:hover {
+  color: #66b5ff;
+}
+
+pre {
+  font-size: 60%;
+  line-height: 1.3;
+  /*max-height:200px;*/
+  overflow-y:scroll !important;
+}
+
+.progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 3px;
+  background-color: #f6d431;
+
+  -webkit-transition: width 0.1s ease-out;
+  -moz-transition: width 0.1s ease-out;
+  -o-transition: width 0.1s ease-out;
+  transition: width 0.1s ease-out;
+}
+
+@media (max-width: 850px) {
+  #wrapper {
+    width: auto;
+  }
+
+  body {
+    font-size: 70%;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  .slide h1 {
+    margin-top: 120px;
+  }
+
+  .controls .prev, .controls .prev:hover {
+    border-right-color: rgba(135, 135, 135, 0.5);
+  }
+
+  .controls .next, .controls .next:hover {
+    border-left-color: rgba(135, 135, 135, 0.5);
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 50%;
+    overflow: hidden;
+  }
+
+  #wrapper {
+    margin-top: 10px;
+    height: 340px;
+  }
+
+  .slide {
+    padding: 10px;
+    height: 340px;
+  }
+
+  .slide h1 {
+    margin-top: 50px;
+  }
+
+  .slide ul {
+    padding-left: 25px;
+  }
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+  }
+
+  @page {
+    size: letter;
+  }
+
+  html {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  body {
+    margin: 0 auto !important;
+    border: 0;
+    padding: 0;
+    float: none !important;
+    overflow: visible;
+    background: none !important;
+    font-size: 52%;
+  }
+
+  .progress, .controls {
+    display: none;
+  }
+
+  #wrapper {
+    overflow: visible;
+    height: 100%;
+    margin-top: 0;
+  }
+
+  .slide {
+    border: 1px solid #222;
+    margin-bottom: 40px;
+    height: 3.5in;
+  }
+
+  .slide:nth-child(odd) {
+    /* 2 slides per page */
+    page-break-before: always;
+  }
+}
+
+/*
+github.com style (c) Vasily Polovnyov <vast@whiteants.net>
+*/
+
+code, pre {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  color: #2980b9;
+  overflow: auto;
+  padding: 6px 10px;
+}
+
+code {
+  padding: 2px 5px;
+  font-size: 60%;
+}
+
+pre>code {
+  font-size: 100%;
+  margin: 0; padding: 0;
+  border: none;
+  background: transparent;
+}
+
+pre .comment,
+pre .template_comment,
+pre .diff .header,
+pre .javadoc {
+  color: #998;
+  font-style: italic
+}
+
+pre .keyword,
+pre .css .rule .keyword,
+pre .winutils,
+pre .javascript .title,
+pre .nginx .title,
+pre .subst,
+pre .request,
+pre .status {
+  color: #333;
+  font-weight: bold
+}
+
+pre .number,
+pre .hexcolor,
+pre .ruby .constant {
+  color: #099;
+}
+
+pre .string,
+pre .tag .value,
+pre .phpdoc,
+pre .tex .formula {
+  color: #d14
+}
+
+pre .title,
+pre .id {
+  color: #900;
+  font-weight: bold
+}
+
+pre .javascript .title,
+pre .lisp .title,
+pre .clojure .title,
+pre .subst {
+  font-weight: normal
+}
+
+pre .class .title,
+pre .haskell .type,
+pre .vhdl .literal,
+pre .tex .command {
+  color: #458;
+  font-weight: bold
+}
+
+pre .tag,
+pre .tag .title,
+pre .rules .property,
+pre .django .tag .keyword {
+  color: #000080;
+  font-weight: normal
+}
+
+pre .attribute,
+pre .variable,
+pre .lisp .body {
+  color: #008080
+}
+
+pre .regexp {
+  color: #009926
+}
+
+pre .class {
+  color: #458;
+  font-weight: bold
+}
+
+pre .symbol,
+pre .ruby .symbol .string,
+pre .lisp .keyword,
+pre .tex .special,
+pre .prompt {
+  color: #990073
+}
+
+pre .built_in,
+pre .lisp .title,
+pre .clojure .built_in {
+  color: #0086b3
+}
+
+pre .preprocessor,
+pre .pi,
+pre .doctype,
+pre .shebang,
+pre .cdata {
+  color: #999;
+  font-weight: bold
+}
+
+pre .deletion {
+  background: #fdd
+}
+
+pre .addition {
+  background: #dfd
+}
+
+pre .diff .change {
+  background: #0086b3
+}
+
+pre .chunk {
+  color: #aaa
+}
+
+blockquote {
+  margin-bottom: 0;
+}
+
+blockquote p {
+  margin: 0;
+}
+
+ul {
+	margin-top: 0;
+	font-size: 0.8em;
+}
+
+small {
+	font-size: 0.6em;
+}
+
+.author h1 {
+	margin-top: 4em;
+}
+
+#intro-to-gulpjs {
+	margin-top: 2em;
+}
+  </style>
+</head>
+<body>
+    <div class="progress">
+    <div class="progress-bar"></div>
+  </div>
+
+<div id="wrapper">
+    <section class="slide"><h1 id="intro-to-gulpjs">Intro to GulpJS</h1>
+<h2 id="profero-tech-talk">Profero Tech Talk</h2>
+<p><em>Friday 28<sup>th</sup> March, 2014</em></p>
+</section>
+    <section class="slide"><h1 id="-profero-profero-logo-png-gulpjs-gulp-logo-png-"><img src="profero-logo.png" alt="Profero"> + <img src="gulp-logo.png" alt="GulpJS"></h1>
+</section>
+    <section class="slide"><h3 id="what-is-a-task-runner-">What is a Task Runner?</h3>
+<blockquote>
+<p>A configurable app to automate a set of predefined tasks, e.g.</p>
+</blockquote>
+<ul>
+<li><strong>Setting up</strong> a new project, files &amp; directories</li>
+<li>Compiling Jade, Stylus, CoffeeScript (or their inferior equivalents)</li>
+<li>Concatonating &amp; minifying stylesheets, script files</li>
+<li>Inlining styles and scripts</li>
+<li>Bundling scripts with Browserify or RequireJS</li>
+<li><strong>Optimising</strong> images</li>
+<li>Running a server (with livereload?)</li>
+<li>Generating a styleguide</li>
+<li>Generating icons from SVG Sprites (icon fonts are so yesterday...)</li>
+<li>Running unit <strong>test</strong>s</li>
+<li>Preparing <strong>deployment</strong> packages</li>
+</ul>
+</section>
+    <section class="slide"><h3 id="task-runner-basics">Task Runner Basics</h3>
+<ul>
+<li>Codekit &amp; Hammer are GUI task runners, Grunt &amp; Gulp run in the command line</li>
+<li>Codekit supports a limited set of tasks</li>
+<li>Grunt and Gulp use <strong>plugins</strong> to do different tasks:<ul>
+<li>2,580 official Grunt plugins available <em>now</em></li>
+<li>432 official Gulp plugins available <em>so far</em></li>
+<li>(Codekit can do about 20 different tasks)</li>
+</ul>
+</li>
+<li>Anyone can write and publish plugins to accomplish different tasks at any time</li>
+<li>Grunt supported by the Google/Twitter/Yeoman/Angular team</li>
+<li>Gulp supported by Substack</li>
+<li>Codekit supported by a guy called Brian...</li>
+</ul>
+</section>
+    <section class="slide"><h3 id="grunt">Grunt</h3>
+<h1 id="-grunt-grunt-logo-png-"><img src="grunt-logo.png" alt="Grunt"></h1>
+</section>
+    <section class="slide"><h3 id="grunt">Grunt</h3>
+<h1 id="-grunt-is-old-grunt-logo-old-png-"><img src="grunt-logo-old.png" alt="Grunt is old"></h1>
+</section>
+    <section class="slide"><h3 id="gruntfile-js-in-project-root-">Gruntfile.js (in project root)</h3>
+<pre><code>module.exports = function(grunt) {
+
+    grunt.loadNpmTasks(&#39;grunt-contrib-watch&#39;);
+    grunt.loadNpmTasks(&#39;grunt-contrib-stylus&#39;);
+
+    grunt.initConfig({
+
+        pkg: grunt.file.readJSON(&#39;package.json&#39;),
+        stylus: {
+            compile: {
+                expand: true,
+                cwd: &#39;src/styles/&#39;,
+                src: &#39;**/*.styl&#39;,
+                dest: &#39;public/styles/&#39;,
+                ext: &#39;.css&#39;
+            }
+        },
+        watch: {
+            files: [&quot;stylus/**/*.styl&quot;],
+            tasks: [&quot;stylus&quot;]
+        }
+
+    });
+
+    grunt.registerTask(&#39;default&#39;, [&#39;watch&#39;]);
+
+}</code></pre>
+</section>
+    <section class="slide"><h3 id="what-was-wrong-with-that-">What was wrong with that?</h3>
+<ul>
+<li>Lots of complicated configuration</li>
+<li>Only really designed for small projects</li>
+<li>More files + more tasks = slooo0000ooow</li>
+<li>Tasks have to be run in a pre-defined sequence</li>
+<li>Plugins do multiple things... can be confusing</li>
+</ul>
+</section>
+    <section class="slide"><h3 id="enter-gulp">Enter Gulp</h3>
+<h1 id="-gulp-gulp-logo-png-"><img src="gulp-logo.png" alt="Gulp"></h1>
+</section>
+    <section class="slide"><h3 id="what-s-the-same-">What&#39;s the same?</h3>
+<ul>
+<li>Local install for each project</li>
+<li>Global command <code>grunt</code> or <code>gulp</code></li>
+<li>Global command runs local project</li>
+<li>It&#39;s all plugins, no built-in tasks</li>
+</ul>
+</section>
+    <section class="slide"><h3 id="what-s-the-difference-">What&#39;s the difference?</h3>
+<ul>
+<li>Stream-based build system (<em>think jQuery: $(&quot;#element&quot;).show().animate(...).hide()...</em>)</li>
+<li>Code over configuration</li>
+<li>Small, idiomatic Node modules</li>
+<li>Really simple, elegant API</li>
+<li>Gulp tasks run with maximum concurrency (not sequentially)</li>
+<li>No need for <code>.tmp</code> files or folders</li>
+</ul>
+</section>
+    <section class="slide"><h3 id="pre-requisites">Pre-requisites</h3>
+<ul>
+<li>NodeJS</li>
+<li>NPM</li>
+<li>Gulp</li>
+<li>Any plugins you want to use</li>
+<li>Command-line Fu</li>
+</ul>
+</section>
+    <section class="slide"><h3 id="basic-gulpfile-in-project-root-streaming-builds">Basic Gulpfile (in project root) - Streaming builds</h3>
+<pre><code>var gulp = require(&quot;gulp&quot;),
+    stylus = require(&quot;gulp-stylus&quot;);
+
+gulp.task(&quot;default&quot;, function() {
+
+    return gulp.src(&quot;src/styles/*.styl&quot;) // &lt;-- Read from FS
+        .pipe(stylus()) // &lt;-- do this to those files
+        .pipe(gulp.dest(&quot;public/styles&quot;)); // &lt;-- Write to FS
+
+});</code></pre>
+</section>
+    <section class="slide"><h3 id="how-to-run-it">How to run it</h3>
+<pre><code>gulp taskname</code></pre>
+<p>or if you have defined a default task...</p>
+<pre><code>gulp</code></pre>
+</section>
+    <section class="slide"><h3 id="want-more-">Want more?</h3>
+<p><small><em>(Coffeescript is nicer :)</em></small></p>
+<pre><code>date = new Date();
+
+gulp.src &quot;src/**/*.styl&quot; // &lt;-- take these files
+
+    // in-memory transforms:
+    .pipe stylus()
+    .pipe rename
+        ext: &quot;css&quot;
+    .pipe autoprefixer()
+    .pipe cssmin()
+    .pipe header(&quot;/* &quot; + date.getDate() + date.getMonth() + date.getFullYear() + &quot; */&quot;)
+    .pipe gulp.dest(&quot;public/styles&quot;) // &lt;-- put the result here</code></pre>
+</section>
+    <section class="slide"><h3 id="the-api-gulp-task">The API - gulp.task</h3>
+<pre><code>gulp.task(&quot;name&quot;, [&quot;deps&quot;], function(done){
+
+    return stream || promise;
+    // ...or, call done()
+
+});</code></pre>
+</section>
+    <section class="slide"><h3 id="the-api-gulp-watch">The API - gulp.watch</h3>
+<pre><code>gulp.watch(&quot;src.ext&quot;, [&quot;task1&quot;, &quot;task2&quot;, ...]);</code></pre>
+</section>
+    <section class="slide"><h3 id="the-api-gulp-src">The API - gulp.src</h3>
+<p>Returns a readable stream</p>
+<pre><code>gulp.src([&quot;src.ext&quot;, &quot;src.ext&quot;,... ]);</code></pre>
+</section>
+    <section class="slide"><h3 id="the-api-gulp-dest">The API - gulp.dest</h3>
+<p>Returns a &quot;through&quot; stream</p>
+<pre><code>gulp.src(&quot;src&quot;)
+    .pipe(...)
+    .pipe(gulp.dest(&quot;dist&quot;));</code></pre>
+<p>Yes, that means you can keep piping! :)</p>
+</section>
+    <section class="slide"><h3 id="workflow">Workflow</h3>
+<ul>
+<li>Install NodeJS</li>
+<li>Navigate to project folder</li>
+<li>Install Gulp globally (<code>sudo npm install -g gulp</code>)</li>
+<li>Install Gulp for your project (<code>npm install gulp --save-dev</code>)</li>
+<li>Find a Gulp plugin to do what you want (<a href="http://gulpjs.com/plugins/"><a href="http://gulpjs.com/plugins/">http://gulpjs.com/plugins/</a></a>)</li>
+<li><del>Learn the configuration style of that plugin</del></li>
+<li>Write your tasks into into <code>Gulpfile.js</code> (including one called &quot;default&quot;)</li>
+<li>Task, watch, src, dest - <strong>that&#39;s it</strong></li>
+<li>Run <code>gulp</code></li>
+</ul>
+</section>
+    <section class="slide"><h3 id="summary">Summary</h3>
+<ul>
+<li>Gulp is more powerful &amp; versatile than GUI tools</li>
+<li>Gulp is new / bleeding edge - needs time to mature</li>
+<li>Gulp is easier to set up than Grunt</li>
+<li>Gulp is faster to use than Grunt</li>
+<li>Gulp keeps your workspace cleaner</li>
+</ul>
+</section>
+    <section class="slide"><h3 id="further-reading-resources">Further Reading &amp; Resources</h3>
+<p>Check out the examples folder in this repo - there are gruntfiles with their gulp equivalent - just navigate to each directory and run <code>grunt</code> or <code>gulp</code> to compile, or <code>grunt reset</code> or <code>gulp reset</code> to start over.</p>
+<ul>
+<li><a href="https://github.com/substack/stream-handbook">The Stream Handbook</a></li>
+<li><a href="http://gulpjs.com/plugins/">Gulp JS Plugins</a></li>
+<li><a href="https://github.com/search?q=gulpfile">Example Gulpfiles</a></li>
+<li><a href="https://github.com/robrich/gulp_dotnet_example/blob/master/Gulpfile.js">Gulp .NET Example</a></li>
+</ul>
+<p>Any questions or problems, ask me.</p>
+</section>
+    <section class="slide"><div class="author">
+  <h1 class="name">Darryl Snow</h1>
+    <h3 class="email">
+      <a href="mailto:darryl.snow@profero.com">darryl.snow@profero.com</a>
+    </h3>
+</div>
+</section>
+</div>
+
+
+  <script type="text/javascript">
+    /**
+ * Takes the last slide and places it at the front.
+ */
+function goBack() {
+  var wrapper = document.querySelector('#wrapper');
+  var lastSlide = wrapper.lastChild;
+  while (lastSlide !== null && lastSlide.nodeType !== 1) {
+    lastSlide = lastSlide.previousSibling;
+  }
+
+  wrapper.removeChild(lastSlide);
+  wrapper.insertBefore(lastSlide, wrapper.firstChild);
+
+  setCurrentProgress();
+  updateURL();
+  updateTabIndex();
+}
+
+/**
+ * Takes the first slide and places it at the end.
+ */
+function goForward() {
+  var wrapper = document.querySelector('#wrapper');
+  var firstSlide = wrapper.firstChild;
+  while (firstSlide !== null && firstSlide.nodeType !== 1) {
+    firstSlide = firstSlide.nextSibling;
+  }
+
+  wrapper.removeChild(firstSlide);
+  wrapper.appendChild(firstSlide);
+
+  setCurrentProgress();
+  updateURL();
+  updateTabIndex();
+}
+
+/**
+ * Updates the current URL to include a hashtag of the current page number.
+ */
+function updateURL() {
+  window.history.replaceState({} , null, '#' + currentPage());
+}
+
+/**
+ * Returns the current page number of the presentation.
+ */
+function currentPage() {
+  return document.querySelector('#wrapper .slide').dataset.page;
+}
+
+/**
+ * Returns a NodeList of each .slide element.
+ */
+function allSlides() {
+  return document.querySelectorAll('#wrapper .slide');
+}
+
+/**
+ * Give each slide a "page" data attribute.
+ */
+function setPageNumbers() {
+  var wrapper = document.querySelector('#wrapper');
+  var pages   = wrapper.querySelectorAll('section');
+  var page;
+
+  for (var i = 0; i < pages.length; ++i) {
+    page = pages[i];
+    page.dataset.page = i;
+  }
+}
+
+/**
+ * Set the current progress indicator.
+ */
+function setCurrentProgress() {
+  var wrapper = document.querySelector('#wrapper');
+  var progressBar = document.querySelector('.progress-bar');
+
+  if (progressBar !== null) {
+    var pagesNumber    = wrapper.querySelectorAll('section').length;
+    var currentNumber  = parseInt(currentPage(), 10);
+    var currentPercent = pagesNumber === 1 ? 100 : 100 * currentNumber / (pagesNumber - 1);
+    progressBar.style.width = currentPercent.toString() + '%';
+  }
+}
+
+/**
+ * Go to the specified page of content.
+ */
+function goToPage(page) {
+  // Try to find the target slide.
+  var targetSlide = document.querySelector('#wrapper .slide[data-page="' + page + '"]');
+
+  // If it actually exists, go forward until we find it.
+  if (targetSlide) {
+    var numSlides = allSlides().length;
+
+    for (var i = 0; currentPage() !== page && i < numSlides; i++) {
+      goForward();
+    }
+  }
+}
+
+/**
+ * Removes tabindex property from all links on the current slide, sets
+ * tabindex = -1 for all links on other slides. Prevents slides from appearing
+ * out of control.
+ */
+function updateTabIndex() {
+  var allLinks = document.querySelectorAll('.slide a');
+  var currentPageLinks = document.querySelector('.slide').querySelectorAll('a');
+  var i;
+
+  for (i = 0; i < allLinks.length; i++) {
+    allLinks[i].setAttribute('tabindex', -1);
+  }
+
+  for (i = 0; i < currentPageLinks.length; i++) {
+    allLinks[i].removeAttribute('tabindex');
+  }
+}
+
+window.onload = function () {
+
+  // Give each slide a "page" data attribute.
+  setPageNumbers();
+
+  // Update the tabindex to prevent weird slide transitioning
+  updateTabIndex();
+
+  // If the location hash specifies a page number, go to it.
+  var page = window.location.hash.slice(1);
+  if (page) {
+    goToPage(page);
+  }
+
+  document.onkeydown = function (e) {
+    var kc = e.keyCode;
+
+    // left, down, H, J, backspace, PgUp - BACK
+    // up, right, K, L, space, enter, PgDn - FORWARD
+    if (kc === 37 || kc === 40 || kc === 8 || kc === 72 || kc === 74 || kc === 33) {
+      goBack();
+    } else if (kc === 38 || kc === 39 || kc === 13 || kc === 32 || kc === 75 || kc === 76 || kc === 34) {
+      goForward();
+    }
+  };
+
+  if (document.querySelector('.next') && document.querySelector('.prev')) {
+    document.querySelector('.next').onclick = function (e) {
+      e.preventDefault();
+      goForward();
+    };
+
+    document.querySelector('.prev').onclick = function (e) {
+      e.preventDefault();
+      goBack();
+    };
+  }
+
+};
+
+
+  </script>
+</body>
+</html>
