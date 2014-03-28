@@ -83,6 +83,7 @@ gulp.task "server", ->
 	lr.listen Config.livereloadport
 	gutil.log gutil.colors.yellow("Server listening on port " + Config.port)
 	gutil.log gutil.colors.yellow("Livereload listening on port " + Config.livereloadport)
+	open("http://localhost:8080")
 
 notifyLivereload = (event) ->
 
