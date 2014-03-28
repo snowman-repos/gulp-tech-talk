@@ -1,3 +1,5 @@
+# This does everything you want it to, except livereload isn't working yet (haven't had time to look into it, but it should be doable)
+
 gulp		= require "gulp"
 gutil		= require "gulp-util"
 jade		= require "gulp-jade"
@@ -13,12 +15,10 @@ prefix		= require "gulp-autoprefixer"
 header		= require "gulp-header"
 concat		= require "gulp-concat"
 size		= require "gulp-size"
-tinylr		= require "tiny-lr"
+
 express		= require "express"
 path		= require "path"
-refresh		= require "gulp-livereload"
-
-lr = {}
+lr			= require("tiny-lr")()
 
 Config =
 	port: 8080
@@ -26,7 +26,7 @@ Config =
 	src: "./src"
 	dist: "./public"
 
-gulp.task "clean", ->
+gulp.task "reset", ->
 	gulp.src Config.dist + "/*", read: false # get everything inside the build folder
 		.pipe clean # "clean" those files (in the Nazi sense of the word...)
 			force: true
@@ -65,27 +65,31 @@ gulp.task "coffeescript", ->
 			showFiles: true
 		.pipe gulp.dest Config.dist + "/scripts" # and put it in the public/scripts folder
 
-gulp.task "server", ->
-	server = express().use(express.static(path.resolve(Config.dist))).listen(Config.port)
-	gutil.log "Server listening on port", Config.port
-
-gulp.task "livereload", ->
-	lr = tinylr()
-	lr.listen Config.livereloadport, (err) ->
-		gutil.log "Livereload error:", err if err
-
 gulp.task "watch", ["jade", "stylus", "coffeescript"], ->
 
 	gulp.watch Config.src + "/jade/**/*.jade", ["jade"]
 	gulp.watch Config.src + "/stylus/**/*.styl", ["stylus"]
 	gulp.watch Config.src + "/coffeescript/**/*.coffee", ["coffeescript"]
 
-	gulp.watch [
-		Config.dist + "/*.html"
-		Config.dist + "/styles/main.min.css"
-		Config.dist + "/scripts/main.min.js"
-	], (evt) ->
-		refresh(lr).changed(evt.path)
+	gulp.watch Config.dist + "/*.html", notifyLivereload
+	gulp.watch Config.dist + "/styles/main.min.css", notifyLivereload
+	gulp.watch Config.dist + "/scripts/main.min.js", notifyLivereload
 
-gulp.task "default", ["clean", "server", "livereload", "watch"]
-	
+gulp.task "server", ->
+	app = express()
+	app.use require("connect-livereload")()
+	app.use express.static(Config.dist)
+	app.listen Config.port
+	lr.listen Config.livereloadport
+	gutil.log gutil.colors.yellow("Server listening on port " + Config.port)
+	gutil.log gutil.colors.yellow("Livereload listening on port " + Config.livereloadport)
+
+notifyLivereload = (event) ->
+
+	fileName = "/" + path.relative Config.dist, event.path
+	gulp.src event.path, read: false
+		.pipe require("gulp-livereload")(lr)
+	gutil.log gutil.colors.yellow("Reloading " + fileName)
+
+
+gulp.task "default", ["reset", "watch", "server"]

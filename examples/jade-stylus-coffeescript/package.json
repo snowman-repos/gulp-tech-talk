@@ -23,7 +23,19 @@
     "tiny-lr": "latest",
     "express": "latest",
     "path": "latest",
-    "gulp-util": "latest"
+    "gulp-util": "latest",
+    "connect-livereload": "latest",
+    "grunt": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-jade": "latest",
+    "grunt-contrib-stylus": "latest",
+    "grunt-contrib-coffee": "latest",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-cssmin": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-contrib-connect": "latest",
+    "grunt-concurrent": "latest"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

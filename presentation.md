@@ -247,11 +247,14 @@ Yes, that means you can keep piping! :)
 
 ### Further Reading & Resources
 
-Check out the examples folder in this repo - there are gruntfiles with their gulp equivalent - just navigate to each directory and run `grunt` or `gulp` to compile, or `grunt reset` or `gulp reset` to start over.
+Check out the examples folder in this repo - there are both Grunt and Gulp implementations so you can compare - just navigate to each directory and run `grunt` or `gulp` to compile, or `grunt reset` or `gulp reset` to start over.
 
 * [The Stream Handbook](https://github.com/substack/stream-handbook)
 * [Gulp JS Plugins](http://gulpjs.com/plugins/)
 * [Example Gulpfiles](https://github.com/search?q=gulpfile)
 * [Gulp .NET Example](https://github.com/robrich/gulp_dotnet_example/blob/master/Gulpfile.js)
+
+This presentation, including examples, is available on Github:
+[https://github.com/darryl-snow/gulp-tech-talk](https://github.com/darryl-snow/gulp-tech-talk)
 
 Any questions or problems, ask me.
